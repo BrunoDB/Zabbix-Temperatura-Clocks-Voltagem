@@ -1,0 +1,150 @@
+zabbix_export:
+  version: '6.2'
+  date: '2022-10-25T19:28:21Z'
+  template_groups:
+    -
+      uuid: 7df96b18c230490a9a0a9e2307226338
+      name: Templates
+  templates:
+    -
+      uuid: 09b79c09b6114430aee39a3d3c396f11
+      template: 'BDB - Hardware Monitor'
+      name: 'BDB - Hardware Monitor'
+      description: 'Software necessario "instalado" na(s) maquina(s) a serem monitoradas LibreHardwareMonitor'
+      groups:
+        -
+          name: Templates
+      discovery_rules:
+        -
+          uuid: 1fc2d2b55fba4505a0afb87a663ecb62
+          name: Clock
+          key: 'wmi.getall[root\LibreHardwareMonitor,select * from Sensor where SensorType=''Clock'']'
+          delay: 24h
+          item_prototypes:
+            -
+              uuid: 294ab84f0a964b26ae8932fa509e37e5
+              name: 'Clock Hardware - {#IDENTIFIER}'
+              key: 'wmi.get[root\LibreHardwareMonitor,select value from Sensor where SensorType=''Clock'' and Identifier=''{#IDENTIFIER}'']'
+              value_type: FLOAT
+              tags:
+                -
+                  tag: Sensor
+                  value: LibreHardwareMonitor
+          graph_prototypes:
+            -
+              uuid: 1a456f72d5784c599eb8d3eaff611834
+              name: 'Clock - {#IDENTIFIER}'
+              graph_items:
+                -
+                  color: 1A7C11
+                  calc_fnc: ALL
+                  item:
+                    host: 'BDB - Hardware Monitor'
+                    key: 'wmi.get[root\LibreHardwareMonitor,select value from Sensor where SensorType=''Clock'' and Identifier=''{#IDENTIFIER}'']'
+          lld_macro_paths:
+            -
+              lld_macro: '{#IDENTIFIER}'
+              path: $.Identifier
+        -
+          uuid: 1aa649548f5f43b3926c2df3ab0f28fa
+          name: Temperatura
+          key: 'wmi.getall[root\LibreHardwareMonitor,select * from Sensor where SensorType=''Temperature'']'
+          delay: 24h
+          item_prototypes:
+            -
+              uuid: 19e53a99191647deabe05cd621c02485
+              name: 'Temperatura Hardware - {#IDENTIFIER}'
+              key: 'wmi.get[root\LibreHardwareMonitor,select value from Sensor where SensorType=''Temperature'' and Identifier=''{#IDENTIFIER}'']'
+              value_type: FLOAT
+              units: C
+              tags:
+                -
+                  tag: Sensor
+                  value: LibreHardwareMonitor
+              trigger_prototypes:
+                -
+                  uuid: 8b84b883cf23465c81789de81d3a367d
+                  expression: 'last(/BDB - Hardware Monitor/wmi.get[root\LibreHardwareMonitor,select value from Sensor where SensorType=''Temperature'' and Identifier=''{#IDENTIFIER}''])>65'
+                  name: '{#IDENTIFIER} - Temperatura está muito alta. {ITEM.LASTVALUE}'
+                  priority: AVERAGE
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: '{#IDENTIFIER} - Temperatura é extremamente alta. {ITEM.LASTVALUE}'
+                      expression: 'last(/BDB - Hardware Monitor/wmi.get[root\LibreHardwareMonitor,select value from Sensor where SensorType=''Temperature'' and Identifier=''{#IDENTIFIER}''])>80'
+                  tags:
+                    -
+                      tag: Sensor
+                      value: LibreHardwareMonitor
+                -
+                  uuid: a8bdbe8c35a649ae91d338d4f02e0312
+                  expression: 'last(/BDB - Hardware Monitor/wmi.get[root\LibreHardwareMonitor,select value from Sensor where SensorType=''Temperature'' and Identifier=''{#IDENTIFIER}''])>73'
+                  name: '{#IDENTIFIER} - Temperatura é alta. {ITEM.LASTVALUE}'
+                  priority: WARNING
+                  manual_close: 'YES'
+                  dependencies:
+                    -
+                      name: '{#IDENTIFIER} - Temperatura está muito alta. {ITEM.LASTVALUE}'
+                      expression: 'last(/BDB - Hardware Monitor/wmi.get[root\LibreHardwareMonitor,select value from Sensor where SensorType=''Temperature'' and Identifier=''{#IDENTIFIER}''])>65'
+                    -
+                      name: '{#IDENTIFIER} - Temperatura é extremamente alta. {ITEM.LASTVALUE}'
+                      expression: 'last(/BDB - Hardware Monitor/wmi.get[root\LibreHardwareMonitor,select value from Sensor where SensorType=''Temperature'' and Identifier=''{#IDENTIFIER}''])>80'
+                  tags:
+                    -
+                      tag: Sensor
+                      value: LibreHardwareMonitor
+                -
+                  uuid: a38a25bf82294cdaaa9a317ff7236493
+                  expression: 'last(/BDB - Hardware Monitor/wmi.get[root\LibreHardwareMonitor,select value from Sensor where SensorType=''Temperature'' and Identifier=''{#IDENTIFIER}''])>80'
+                  name: '{#IDENTIFIER} - Temperatura é extremamente alta. {ITEM.LASTVALUE}'
+                  priority: DISASTER
+                  manual_close: 'YES'
+                  tags:
+                    -
+                      tag: Sensor
+                      value: LibreHardwareMonitor
+          graph_prototypes:
+            -
+              uuid: 3ef6cc94de584e91af36f4411064fe16
+              name: 'Temperatura - {#IDENTIFIER}'
+              graph_items:
+                -
+                  color: 1A7C11
+                  item:
+                    host: 'BDB - Hardware Monitor'
+                    key: 'wmi.get[root\LibreHardwareMonitor,select value from Sensor where SensorType=''Temperature'' and Identifier=''{#IDENTIFIER}'']'
+          lld_macro_paths:
+            -
+              lld_macro: '{#IDENTIFIER}'
+              path: $.Identifier
+        -
+          uuid: 5c1dd26cb2fb4a79962abb0f49e4a3db
+          name: Voltagem
+          key: 'wmi.getall[root\LibreHardwareMonitor,select * from Sensor where SensorType=''Voltage'']'
+          delay: 24h
+          item_prototypes:
+            -
+              uuid: 97b0496e6b53494e919010afeadb339f
+              name: 'Voltagem Hardware - {#IDENTIFIER}'
+              key: 'wmi.get[root\LibreHardwareMonitor,select value from Sensor where SensorType=''Voltage'' and Identifier=''{#IDENTIFIER}'']'
+              value_type: FLOAT
+              units: V
+              tags:
+                -
+                  tag: Sensor
+                  value: LibreHardwareMonitor
+          graph_prototypes:
+            -
+              uuid: a32620851a514d168d307a54755fb565
+              name: 'Voltagem - {#IDENTIFIER}'
+              graph_items:
+                -
+                  color: 1A7C11
+                  calc_fnc: ALL
+                  item:
+                    host: 'BDB - Hardware Monitor'
+                    key: 'wmi.get[root\LibreHardwareMonitor,select value from Sensor where SensorType=''Voltage'' and Identifier=''{#IDENTIFIER}'']'
+          lld_macro_paths:
+            -
+              lld_macro: '{#IDENTIFIER}'
+              path: $.Identifier
