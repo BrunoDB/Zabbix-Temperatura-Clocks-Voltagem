@@ -4,7 +4,7 @@ Template criado apenas por diversão.
 Pode utilizado como desejar.
 
 # Resumo
-Foi criado para sistema Windows, foi utilizado o LibreHardwareMonitor(V0.9.1) como sensor das informações, mas pode ser utilizado o OpenHardwareMonitor, porém é necessário um pequeno ajuste. 
+Foi criado para sistema Windows(AMD e Intel), foi utilizado o LibreHardwareMonitor(V0.9.1) como sensor das informações, mas pode ser utilizado o OpenHardwareMonitor, porém é necessário um pequeno ajuste. 
 
 O template realiza a descoberta de todos os sensores de temperatura, clock e voltagem do dispositivo de forma separada, porém ele se limita a descoberta do LibreHardwareMonitor.
 Cria de forma individual cada item descoberto e adiciona o nome do sensor(Não ficou muito bonito), os itens temperatura é criado gráficos para cada item e triggers de temperatura, os itens clock e voltagem apenas coleta as informações e gera gráficos de cada item.
