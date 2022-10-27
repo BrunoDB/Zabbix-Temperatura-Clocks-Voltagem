@@ -1,7 +1,7 @@
 # Zabbix-Temperatura-Clocks-Voltagem
 
 Template criado apenas por diversão.
-Pode utilizado como desejar.
+Podem utilizar como desejar.
 
 # Resumo
 Foi criado para sistema Windows(AMD e Intel), foi utilizado o LibreHardwareMonitor(V0.9.1) como sensor das informações, mas pode ser utilizado o OpenHardwareMonitor, porém é necessário um pequeno ajuste. 
